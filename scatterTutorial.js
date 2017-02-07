@@ -1,14 +1,37 @@
 // First, we will create some constants to define non-data-related parts of the visualization
-// Width of our visualization
-// Height of our visualization
-// Space for x-axis labels
-// Space for y-axis labels
-// Margin around visualization
-// List of data attributes
-// Value to plot on x-axis
-// Value to plot on y-axis
+var w = 700; // Width of our visualization
+var h = 500; // Height of our visualization
+var xOffset = 40; // Space for x-axis labels
+var yOffset = 100; // Space for y-axis labels
+var margin = 10; // Margin around visualization
+var vals = ['Rank', 'Frequency', 'TFIDF', 'Document Frequency']; // List of data attributes
+var xVal = vals[0]; // Value to plot on x-axis
+var yVal = vals[1]; // Value to plot on y-axis
 
 // Next, we will load in our CSV of data
+d3.csv( 'shakespeare_top100.csv', function( csvData ){
+  data = csvData;
+
+  // Define scales that convert from the data domain to screen coordinates
+  xScale = d3.scale.linear()
+             .domain([d3.min( data, function( d ){
+                      return parseFloat( d[xVal] );
+                    })-1, d3.max( data, function( d ){
+                      return parseFloat( d[xVal] );
+                    })+1])
+             .range([xOffset + margin, w - margin]);
+
+  yScale = d3.scale.linear()
+            .domain([d3.min( data, function( d ){
+                     return parseFloat( d[yVal] );
+                   })-1, d3.max( data, function( d ){
+                     return parseFloat( d[yVal] );
+                   })+1])
+            .range([h - yOffset - margin, margin]);
+
+  var svg = d3.select("#pointsSVG").append("svg:svg")
+                                   .attr("width", w)
+                                   .attr("height", h);
 
 	// This will define scales that convert values
 	// from our data domain into screen coordinates.
