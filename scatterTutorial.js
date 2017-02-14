@@ -32,14 +32,14 @@ d3.csv( 'shakespeare_top100.csv', function( csvData ){
             .range([h - yOffset - margin, margin]);
 
 	// Next, we will create an SVG element to contain our visualization.
-  var svg = d3.select("#pointsSVG").append("svg:svg")
-                                   .attr("width", w)
-                                   .attr("height", h);
+  var svg = d3.select('#pointsSVG').append('svg:svg')
+                                   .attr('width', w)
+                                   .attr('height', h);
 
 	// Build axes! (These are kind of annoying, actually...)
   var xAxis = d3.svg.axis()
                     .scale(xScale)
-                    .orient("bottom")
+                    .orient('bottom')
                     .ticks(5);
 
   var xAxisG = svg.append('g')
@@ -55,7 +55,7 @@ d3.csv( 'shakespeare_top100.csv', function( csvData ){
 
   var yAxis = d3.svg.axis()
                     .scale(yScale)
-                    .orient("left")
+                    .orient('left')
                     .ticks(5);
 
   var yAxisG = svg.append('g')
@@ -72,15 +72,28 @@ d3.csv( 'shakespeare_top100.csv', function( csvData ){
 	// Now, we will start actually building our scatterplot!
 		// Select elements
 		// Bind data to elements
+var point = svg.selectAll('.point')
+               .data(data);
 
 		// Create new elements if needed
+point.enter().append('svg:circle');
 
 		// Update our selection
-			// Give it a class
+		   // Give it a class
+point.attr('class', 'point')
 			// x-coordinate
+      .attr('cx', function( d ){ return xScale(d[xVal]); })
 			// y-coordinate
+			.attr('cy', function( d ){ return yScale(d[yVal]); })
 			// radius
-			// tooltip
+			.attr('r', 0)
+      // transition flash
+			.transition()
+      .duration(1000)
+      .attr('r', 8);
+      // tooltip
+point.append('svg:title')
+     .text(function( d ){ return d['Word'] });
 
     // Now, let's select all of our points and change their color
 });
